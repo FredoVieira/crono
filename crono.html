@@ -1,0 +1,702 @@
+<html lang="pt-br">
+  <head>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf8;"/> 
+    <meta http-equiv="Expires" content="Sun, 21 Aug 2019 21:08:00 GMT"/> 
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate"/> 
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <script language="JavaScript" src="biblio.js"></script>
+    <title>Cron&ocirc;metro v1.12</title>
+<style>
+@charset "iso-8859-1";
+#menu0,#menu1,#menu2,#menu3,#menu4,#menu5,#menu6,#menu7,#menu8,#menu9,#menu10{ display:none; }
+body {
+  color:white;
+  background:blue;
+  font-Family:Times,'Comic Sans',Arial,Tahoma;
+}
+.pages {
+  position:absolute; /* 'fixed' não funciona no IE */
+  left:1%;
+  top:1%;
+  width:98%;
+  height:98%;
+  align:center;
+  text-align:center;
+  font-size:1em;
+  cursor:default;
+  z-index:1;
+}
+.relogio {
+  position:absolute; /* 'fixed' não funciona no IE */
+  left:1%;
+  top:1%;
+  width:96%;
+  height:20%;
+  padding:1% 1% 1% 1%;
+  align:right;
+  text-align:right;
+  color:yellow;
+  font-color:yellow;
+  font-weight:bold;
+  cursor:default;
+  z-index:2;
+}
+.menuOn {
+  position:absolute; /* 'fixed' não funciona no IE */
+  left:1px;
+  top:-78px;
+  background-color:lightgreen;
+  border:2px outset #0F0;
+  font-size:0.8em;
+  font-weight:bold;
+  cursor:pointer;
+  width:76px;
+  text-align:center;
+  color:black;
+  filter:alpha(opacity=9); /* para o IE */
+  opacity:0.9;  /* padrão CSS3 */
+  display:none;
+  z-index:9;
+}
+a:link {
+  text-decoration:none;
+  color:white;
+}
+a:hover { color:red; }
+a:visited { color:yellow; }
+</style>
+  </head>
+  <body>
+    <div class="menuOn" id="menu1" onclick="sobre();">Sobre ...</div>
+    <div class="menuOn" id="menu2" onclick="acionarCronoHorario();">Acionar<BR>Cron&ocirc;metro</div>
+    <div class="menuOn" id="menu3" onclick="alternarPausaContinua();">Pausar</div>
+    <div class="menuOn" id="menu4" onclick="myReset();" title="Reset">Reconfigurar<BR>(<I>Reset</I>)</div>
+    <div class="menuOn" id="menu5">Tamanho do<BR>Cron&ocirc;metro</div>
+    <div class="menuOn" id="smenu5">
+      <DIV onclick="aumentarFonte();" onmouseover="cR(this);" onmouseout="cO(this);">Aumentar</DIV>
+      <DIV onclick="diminuirFonte();" onmouseover="cR(this);" onmouseout="cO(this);">Diminuir</DIV>
+    </div>
+    <div class="menuOn" id="menu6">Fonte do<BR>Cron&ocirc;metro</div>
+    <div class="menuOn" id="smenu6" style="min-width:130px;">
+      <table width="100%" style="text-align:center;color:black;">
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'');" title="-> Bot&atilde;o esquerdo do mouse: Clique&#13;   para usar a Fonte padrão.&#13;&#13;-> Bot&atilde;o direito: Clique para&#13;   obter ajuda sobre uso das fontes.">-  Padr&atilde;o  -</td></tr>
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'lcd');" style="font-family:lcd;font-size:1.4em;">LCD</td></tr>
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'comic');" style="font-family:'comic sans ms';font-size:0.95em;">Comic Sans</td></tr>
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'impact');" style="font-family:impact;font-size:0.95em;">Impact</td></tr>
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'arial');" style="font-family:arial;font-size:0.95em;">Arial</td></tr>
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'tahoma');" style="font-family:tahoma;">Tahoma</td></tr>
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'times');" style="font-family:times;">Times</td></tr>
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'courier');" style="font-family:'courier new';font-size:1.05em;">Courier New</td></tr>
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'broadway');" style="text-align:center;font-family:'broadway bt';font-size:0.9em;">Broadway</td></tr>
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'verdana');" style="text-align:center;font-family:verdana;">Verdana</td></tr>
+        <tr><td onclick="trocarFonte(this);" onmouseover="cR(this);" onmouseout="cB(this);" oncontextmenu="downLoad(event,'virtual');" style="text-align:center;font-family:'virtual dj';font-size:0.85em;">Virtual DJ</td></tr>
+      </table>
+    </div>
+    <div class="menuOn" id="menu7" onclick="diminuirFonte();">Troca Cor<BR>de Fundo</div>
+    <div class="menuOn" id="smenu7">
+      <table width="100%" style="text-align:center;color:black;">
+        <tr><td onclick="corDeFundoPadrao();" onmouseover="cR(this);" onmouseout="cW(this)" style="background:blue;color:white;" title="-> Clique para trocar a&#13;   cor de fundo padrão.">- Padr&atilde;o -</td></tr>
+        <tr><td id="troca1" onclick="trocarCor(this);" onmouseover="cW(this);" onmouseout="cB(this);" style="background:green;" title="&lt;  Limite indefinido &gt;">Verde</td></tr>
+        <tr><td id="troca2" onclick="trocarCor(this);" onmouseover="cR(this);" onmouseout="cB(this);" style="background:yellow;" title="&lt;  Limite indefinido &gt;">Amarela</td></tr>
+        <tr><td id="troca3" onclick="trocarCor(this);" onmouseover="cR(this);" onmouseout="cB(this);" style="background:orange;" title="&lt;  Limite indefinido &gt;">Laranja</td></tr>
+        <tr><td id="troca4" onclick="trocarCor(this);" onmouseover="cW(this);" onmouseout="cB(this);" style="background:red;" title="&lt;  Limite indefinido &gt;">Vermelha</td></tr>
+        <tr><td id="troca5" onclick="trocarCor(this);" onmouseover="cW(this);" onmouseout="cB(this);" style="background:violet;" title="&lt;  Limite indefinido &gt;">Violeta</td></tr>
+      </table>
+    </div>
+    <div class="menuOn" id="menu8" onclick="pontoDeParada();" title="Atual:&#13;00:00:00">Ponto de<BR>Parada</div>
+    <div class="menuOn" id="menu9">Tamanho do<BR>Rel&oacute;gio</div>
+    <div class="menuOn" id="smenu9">
+      <DIV onclick="aumentarRelogio();" onmouseover="cR(this);" onmouseout="cO(this);">Aumentar</DIV>
+      <DIV onclick="diminuirRelogio();" onmouseover="cR(this);" onmouseout="cO(this);">Diminuir</DIV>
+    </div>
+<!-- 1ª Página -->
+<div id="dv1" class="pages">
+    <table id="borda" width="100%" height="100%" style="text-align:center;border:3px solid lightblue;font-size:10em;font-weight:bold;">
+      <tr>
+        <td id="hora" width="26%" onclick="ajustarHora();" title="Alterar a HORA." style="align:center;cursor:pointer;">&nbsp;</td>
+        <td id="pt1" width="7%" onclick="alternarPausaContinua();" title="Clique para Pausar." style="cursor:pointer;">&nbsp;</td>
+        <td id="minuto" width="26%" onclick="ajustarMinuto();" title="Alterar o MINUTO." style="cursor:pointer;">&nbsp;</td>
+        <td id="pt2" width="7%" onclick="alternarPausaContinua();" title="Clique para Pausar." style="cursor:pointer;">&nbsp;</td>
+        <td id="segundo" width="26%" onclick="ajustarSegundo();" title="Alterar o SEGUNDO." style="cursor:pointer;">&nbsp;</td>
+        <td align="center" width="8%" style="text-align:center;cursor:pointer;">
+          <img id="toUp" src="up.png" onclick="regressivo();" title="Configurar regressivo."/>
+          <img id="toDown" src="down.png" style="display:none;" onclick="progressivo();" title="Configurar progressivo."/>
+          <img id="pausa" src="pausa.cur" style="display:none;" onclick="prosseguirCrono();" width="64px" height="64px" title="Crono est&aacute; pausado ...&#13;Clique para continuar !"/>
+          <img id="parado" src="parado.png" style="display:none;" onclick="prosseguirCrono();" title="Crono est&aacute; parado ...&#13;Clique para continuar !"/>
+        </td>
+      </tr>
+    </table>
+</div>
+<div id="relogio" class="relogio" style="font-size:2em;">&nbsp;</div>
+   </body>
+<script>
+// Variáveis "globais" (semáforos):
+var mode=0,sentido=1,status=0,comPonto=true,rept;  // mode "0" -> horário;  mode "1" -> cronômetro
+// Cópia do valor que está sendo exibido no modo "pisca":
+var bkpHour='',bkpMin='',bkpSeg='';
+var padrao='00:50:00';  // padrão para o reinício do modo "Crono"
+var limite=new Array(),coresFundo='blue,green,yellow,orange,red,violet',coresFrente='white,white,black,black,white,black,white,white,white';
+var valid=';blue;green;yellow;orange;red;violet;gold;gray;darkgray;black;',ajusteDaFonte=1;
+function lineFeed() { return String.fromCharCode(10) };  // nova linha
+//
+function cB(o){$color(o,'Black')};  // cor preta
+function cR(o){$color(o,'Red')};  // cor vermelha
+function cY(o){$color(o,'Yellow')};  // amarela
+function cW(o){$color(o,'White')};  // branca
+function cO(o){$color(o,'')};  // original
+var LF=lineFeed;  // apelido ('alias') para mudança de linha
+function LF2(){return LF()+LF()};  // duas linhas (linha 'em branco')
+//
+function sobre() { alert('Objetivo: exibir Horário e/ou Cronômetro para o'+LF()+
+                         '     controle do tempo de palestras e reuniões.'+LF()+
+                         'Versão: 1.11'+LF()+
+                         'Atualizado em: 26 Jul 2018'+LF()+
+                         'Programador: fredovieira@yahoo.com.br') };
+//
+function generateNoise(opacity) {
+  if ( !!!$Doc.createElement('canvas').getContext)  return false;
+  var canvas = $Doc.createElement('canvas'),
+      ctx = canvas.getContext('2d'),
+      x, y,
+      r, g, b,
+      opacity = opacity || .2;
+
+  // CONFIGURA O CANVAS PARA OCUPAR TODA A TELA:
+  canvas.id="stage";
+  canvas.width=100;
+  canvas.height=100;
+
+  ctx = canvas.getContext('2d');
+  for ( x = 0; x < canvas.width; x++ ) {
+    for ( y = 0; y < canvas.height; y++ ) {
+      r = Math.floor( Math.random() * 80 );
+      g = Math.floor( Math.random() * 80 );
+      b = Math.floor( Math.random() * 80 );
+      ctx.fillStyle = 'rgba('+r+','+g+','+b+','+opacity+')';
+      ctx.fillRect(x, y, 1, 1);
+    }
+  }
+  // Converte os dados para imagem:
+  $style($Body).backgroundImage = 'url(' + canvas.toDataURL('image/png') + ')';
+  delete canvas;
+};
+function ocultarBotoes() {
+  $hide('toDown');
+  $hide('toUp');
+  $hide('pausa');
+  $hide('parado');
+};
+function piscarNumeros() {
+  if ($Win.status!=2) {
+    $Win.status=2; // LIMPO
+    $Win.bkpHour=$getHtml('hora');
+    $setHtml('hora','&nbsp;');
+    $setHtml('pt1','&nbsp;');  // ':'
+    $Win.bkpMin=$getHtml('minuto');
+    $setHtml('minuto','&nbsp;');
+    $setHtml('pt2','&nbsp;');  // ':'
+    $Win.bkpSeg=$getHtml('segundo');
+    $setHtml('segundo','&nbsp;');
+  } else {
+    $Win.status=1;
+    $setHtml('hora',$Win.bkpHour);
+    $setHtml('pt1',':');  // ':'
+    $setHtml('minuto',$Win.bkpMin);
+    $setHtml('pt2',':');  // ':'
+    $setHtml('segundo',$Win.bkpSeg);
+  }
+  // Corrige a cor da fonte do relógio, SFC:
+  $style('relogio').color=($Win.coresFundo[0]=='yellow'?'black':'yellow');
+  $Win.rept=setTimeout('piscarNumeros()',500);
+};
+function atualizarTitleCrono(valor) {
+  var p1=$get('pt1'),p2=$get('pt2'),v=$Natural(valor),txt='Clique para '+(v<1?'parar.':'continuar.');
+  if (p1)  p1.title=txt;
+  if (p2)  p2.title=txt;
+};
+function pausarCrono() {
+  $clear($Win.rept);
+  ocultarBotoes();
+  $show('pausa');
+  $Win.mode=1;  // pausa só pode no modo Cronômetro
+  $setHtml('menu2','Acionar<BR>Relógio');
+  $Win.status=1;
+  $setHtml('menu3','Continuar');
+  atualizarTitleCrono(1); // 1 -> continuar
+  piscarNumeros();
+};
+function pararCrono() {
+  $clear($Win.rept);
+  ocultarBotoes();
+  $show('parado');
+  $Win.mode=1;  // pausa só pode no modo Cronômetro
+  $setHtml('menu2','Acionar<BR>Relógio');
+  $Win.status=1;
+  $setHtml('menu3','Continuar');
+  atualizarTitleCrono(1); // 1 -> continuar
+  piscarNumeros();
+};
+//
+function pararPiscar() {
+  $clear($Win.rept);  if ($Win.status==0)  return false;  // NÃO estava pausado
+  $setHtml('hora',$Win.bkpHour);
+  $setHtml('pt1',':');  // ':'
+  $setHtml('minuto',$Win.bkpMin);
+  $setHtml('pt2',':');  // ':'
+  $setHtml('segundo',$Win.bkpSeg);
+  return true; // sim, estava piscando
+};
+function trocarCorDeFundo(fundo) {
+  fundo=$String(fundo).toLowerCase();  if (fundo=='')  fundo=$Win.coresFundo[0];  // "0" -> cor padrão
+  // Para corrigir a cor da fonte exibida e conseguir manter o contraste necessário:
+  var frente='';
+  for (var i=0,temp;(temp=$Win.valid.tokout(i+1,';'))!='';i++) {
+    if (fundo==temp) {
+      frente=$Win.coresFrente[i];
+      break;
+    }
+  }
+  if (frente=='')  return '-> A cor de Fundo informada é inválida!';
+  $backcolor($Body,fundo);  // muda para a cor configurada pelo usuário
+  $style($Body).color=frente;
+  // Verifica se existe algum Limite de tempo configurado:
+  var existe=false;
+  for (var i=1,qtd=$Win.limite.length;i<qtd;i++) {  //  i == 0  =>  ponto de parada
+    if ($Win.limite[i]<1) continue;  // a cor está desativada0
+    existe=true;
+  }
+  if (!existe)  setTimeout('generateNoise(0.3)',50);  // com textura
+};
+function verificarTrocaDeCorDeFundo() {
+  // Captura o que está sendo exibido:
+  var h=$Natural($getHtml('hora')),m=$Natural($getHtml('minuto')),s=$Natural($getHtml('segundo'));
+  // Verifica se precisa trocar a cor de fundo:
+  var trocar=0,atual=0,hora=deHoraParaSerial(h+':'+m+':'+s),existe=false;
+  for (var i=1,qtd=$Win.coresFundo.length;i<qtd;i++) {  //  i == 0  =>  ponto de parada
+    if ($Win.limite[i]<1) continue;  // a cor está desativada0
+    existe=true;
+    // Cronômetro crescente:
+    if ($Win.sentido>0) {
+      if (hora>=$Win.limite[i]) {
+        if (atual>0 && $Win.limite[i]<atual)  continue;  // para capturar a cor do MAIOR tempo de mudança
+        atual=$Win.limite[i];
+        trocar=i; // Nº de Ordem da cor a ser usada
+      }
+      continue;
+    }
+    // Cronômetro decrescente:
+    if (hora<$Win.limite[i]) {
+      if (atual>0 && $Win.limite[i]>atual)  continue;  // para capturar a cor do MENOR tempo de mudança
+      atual=$Win.limite[i];
+      trocar=i; // Nº de Ordem da cor a ser usada
+    }
+  }
+  if (existe) {
+    $backcolor($Body,$Win.coresFundo[trocar]);  // muda para a cor configurada pelo usuário
+    $style($Body).color=$Win.coresFrente[trocar];
+  }
+  // Corrige a cor da fonte do relógio, SFC:
+  $style('relogio').color=(($Win.coresFundo[0]=='yellow'||$Win.coresFundo[trocar]=='yellow')?'black':'yellow');
+};
+function prosseguirCrono() {
+  var h,m,s;
+  
+  pararPiscar();
+  if ($Win.mode==0)  $Win.sentido=1;  // relógio só anda para frente
+  if ($Win.sentido<0)  $Win.mode=1;  // cronômetro que é regressivo
+  $setHtml('menu2','Acionar<BR>'+($Win.mode==0?'Cronômetro':'Relógio'));
+  $setHtml('menu3',($Win.status==0?'Pausar':'Continuar'));
+  $Win.status=0;
+  // Exibe o ícone certo:
+  $hide('pausa');
+  $hide('parado');
+  if ($Win.sentido==1) {
+    $hide('toDown');
+    $show('toUp');
+  } else {
+    $hide('toUp');
+    $show('toDown');
+  }
+  // mode == 1  -> modo cronômetro
+  if ($Win.mode==1) {
+    h=$Natural($getHtml('hora'));
+    m=$Natural($getHtml('minuto'));
+    s=$Natural($getHtml('segundo'))+$Win.sentido;
+    if (s>59) {
+      s=0;  m=m+1
+    } else if (s<0) {
+      s=59;  m=m-1
+    }
+    if (m>59) {
+      m=0;  h=h+1;
+    } else if (m<0) {
+      m=59;  h=h-1;
+    }
+    if (h>23)  h=0;
+    else if (h<0)  h=23;
+  } else {  // mode == 0  -> modo relógio
+    var dt=new Date();
+    h=dt.getHours();
+    m=dt.getMinutes();
+    s=dt.getSeconds();
+  }
+  // Atualiza o cronômetro:
+  $setHtml('hora',$padL(h,2,'0'));
+  $setHtml('minuto',$padL(m,2,'0'));
+  $setHtml('segundo',$padL(s,2,'0'));
+  atualizarTitleCrono(0); // 0 -> parar
+  // Retire os comentários abaixo para piscar os dois pontos ":":
+  // var p1=$get('pt1'),p2=$get('pt2');
+  // if ($Win.comPonto) {
+  //   $setHtml(p1,':');
+  //   $setHtml(p2,':');
+  //   $Win.comPonto=false;
+  // } else {
+  //   $setHtml(p1,'&nbsp;');
+  //   $setHtml(p2,'&nbsp;');
+  //   $Win.comPonto=true;
+  // }
+  // Verifica se deve parar:
+  if (deHoraParaSerial(h+':'+m+':'+s)==$Win.pontoParada) {
+    pararCrono();
+    trocarCorDeFundo();  // muda para a cor padrão
+    return;
+  }
+  verificarTrocaDeCorDeFundo();
+  $Win.rept=setTimeout('prosseguirCrono()',1000);
+};
+function alternarPausaContinua() {
+  pararPiscar();
+  var estado=($Win.status==0?1:0);  // inverte o valor
+  $setHtml('menu3',(estado==0?'Pausar':'Continuar'));
+  $Win.status=estado;
+  if (estado==1)  pausarCrono();
+  else  prosseguirCrono();
+};
+function acionarCronoHorario(modo) {  // Se modo=='', alterna o valor
+  $clear($Win.rept);
+  modo=$String(modo);
+  modo=(modo==''?($Win.mode==0?1:0):$Natural(modo));
+  $Win.mode=modo;
+  ocultarBotoes();
+  if (modo==0) {  // Aciona o modo "Horário" ...
+    $Win.sentido=1;
+    $Win.status=0;  // NÃO está pausado
+    var dt=new Date();
+    $setHtml('hora',$padL(dt.getHours(),2,'0'));
+    $setHtml('pt1',':');  // ':'
+    $setHtml('minuto',$padL(dt.getMinutes(),2,'0'));
+    $setHtml('pt2',':');  // ':'
+    $setHtml('segundo',$padL(dt.getSeconds(),2,'0'));
+  }
+  $setHtml('menu2','Acionar<BR>'+($Win.mode==0?'Cronômetro':'Relógio'));
+  prosseguirCrono();
+};
+//
+function ajustarHora() {
+  var piscava=pararPiscar(),dt=new Date(),h=($Win.mode==0?dt.getHours():$getHtml('hora'));  if (h<1) h=0;
+  
+  var resp=prompt('-> Digite a nova hora:',h);
+  if (resp) {
+    var naoPode=resp.tokout(1,'0123456789');
+    if (naoPode!='')  {
+      alert('>> Você digitou caracter inválido: "'+naoPode+'".');
+    } else {
+      h=$Natural(resp);  if (h==24)  h=0;
+      if (h<0||h>24)  return alert('>> A hora digitada "'+h+'" é inválida.');
+      if (h!=$Natural($getHtml('hora'))) {
+        $setHtml('hora',($Win.bkpHour=$padL(h,2,'0')));  // para evitar problema com o "pause"
+        acionarCronoHorario(1);
+      }
+    }
+  }
+  if (piscava)  pausarCrono();
+  else  prosseguirCrono();
+};
+function ajustarMinuto() {
+  var piscava=pararPiscar(),dt=new Date(),m=($Win.mode==0?dt.getMinutes():$getHtml('minuto'));  if (m<1) m=0;
+
+  var resp=prompt('-> Digite o novo minuto:',m);
+  if (resp) {
+    var naoPode=resp.tokout(1,'0123456789');
+    if (naoPode!='') {
+      alert('>> Você digitou caracter inválido: "'+naoPode+'".');
+    } else {
+      m=$Natural(resp);  if (m==60)  m=0;
+      if (m<0||m>60)  return alert('>> O minuto digitado "'+m+'" é inválido.');
+      if (m!=$Natural($getHtml('minuto'))) {
+        $setHtml('minuto',($Win.bkpMin=$padL(m,2,'0')));  // para evitar problema com o "pause"
+        acionarCronoHorario(1);
+      }
+    }
+  }
+  if (piscava)  pausarCrono();
+  else  prosseguirCrono();
+};
+function ajustarSegundo() {
+  var piscava=pararPiscar(),dt=new Date(),s=($Win.mode==0?dt.getSeconds():$getHtml('segundo'));  if (s<1) s=0;
+  
+  var resp=prompt('-> Digite o novo segundo:',s);
+  if (resp) {
+    var naoPode=resp.tokout(1,'0123456789'); 
+    if (naoPode!='') {
+      alert('>> Você digitou caracter inválido: "'+naoPode+'".');
+    } else {
+      s=$Natural(resp);  if (s==60)  s=0;
+      if (s<0||s>60)  return alert('>> O segundo digitado "'+s+'" é inválido.');
+      if (s!=$Natural($getHtml('segundo'))) {
+        $setHtml('segundo',($Win.bkpSeg=$padL(s,2,'0')));  // para evitar problema com o "pause"
+        acionarCronoHorario(1);
+      }
+    }
+  }
+  if (piscava)  pausarCrono();
+  else  prosseguirCrono();
+};
+function progressivo() {
+  pararPiscar();
+  var resp=confirm('-> Configurar como relógio progressivo ?');
+  
+  if (resp) {
+    $Win.sentido=1;
+    ocultarBotoes();
+    $show('toUp');
+  }
+  prosseguirCrono();
+};
+function regressivo() {
+  pararPiscar();
+  var resp=confirm('-> Configurar como regressivo ?');
+  
+  if (resp) {
+    $Win.mode=1;  // modo cronômetro
+    $Win.sentido=-1;
+    ocultarBotoes();
+    $show('toDown');
+  }
+  prosseguirCrono();
+};
+//
+function aumentarFonte() {
+  var borda=$style('borda'),size=Number(borda.fontSize.tokin(1,$Def.numeral+'.'));
+  
+  size+=0.2;  if (size>25)  return;
+  borda.fontSize=size+'em';
+};
+function diminuirFonte() {
+  var borda=$style('borda'),size=Number(borda.fontSize.tokin(1,$Def.numeral+'.'));
+  
+  size-=0.2;  if (size<1)  return;
+  borda.fontSize=size+'em';
+};
+//
+function aumentarRelogio() {
+  var relogio=$style('relogio'),size=Number(relogio.fontSize.tokin(1,$Def.numeral+'.'));
+  
+  if ($Win.mode<1) {
+    alert('-> O relógio que é exibido no canto superior direito do'+LF()+
+          '   monitor está OCULTO porque o sistema está no Modo'+LF()+
+          '   Relógio, e o está exibindo no CENTRO do monitor.'+LF2()+
+          '-> Portanto, NÃO posso aumentar o tamanho da fonte'+LF()+
+          '   do relógio enquanto ele estiver OCULTO.');
+  }
+  size+=0.2;  if (size>5)  return;
+  relogio.fontSize=size+'em';
+};
+function diminuirRelogio() {
+  var relogio=$style('relogio'),size=Number(relogio.fontSize.tokin(1,$Def.numeral+'.'));
+  
+  if ($Win.mode<1) {
+    alert('-> O relógio que é exibido no canto superior direito do'+LF()+
+          '   monitor está OCULTO porque o sistema está no Modo'+LF()+
+          '   Relógio, e o está exibindo no CENTRO do monitor.'+LF2()+
+          '-> Portanto, NÃO posso diminuir o tamanho da fonte'+LF()+
+          '   do relógio enquanto ele estiver OCULTO.');
+  }
+  size-=0.2;  if (size<1)  return;
+  relogio.fontSize=size+'em';
+};
+//
+//
+function myReset() {
+  var piscava=pararPiscar(),empty=false;  // armazena se estava piscando
+  if (padrao=='') {
+    empty=true;
+    var h=$padL($Natural($getHtml('hora')),2,'0');
+    var m=$padL($Natural($getHtml('minuto')),2,'0');
+    var s=$padL($Natural($getHtml('segundo')),2,'0');
+    padrao=h+':'+m+':'+s;
+  }
+  var resp=prompt('Digite o novo tempo-padrão (formato: "hh:mm:ss") a ser configurado:',padrao);
+  if (resp) {
+    var h=$padL(resp.tokin(1,$Def.numeral),2,'0');
+    var m=$padL(resp.tokin(2,$Def.numeral),2,'0');
+    var s=$padL(resp.tokin(3,$Def.numeral),2,'0');
+    // Atribui o novo valor:
+    padrao=h+':'+m+':'+s
+    $setHtml('hora',h);
+    $setHtml('minuto',m);
+    $setHtml('segundo',s);
+    // Arruma o backup:
+    $Win.bkpHour=h;
+    $Win.bkpMin=m;
+    $Win.bkpSeg=s;
+    resp=prompt('Deseja um relógio regressivo (SIM) ou progressivo (não) ?','SIM');
+    resp = (resp?resp.toUpperCase():'NÃO');
+    $Win.sentido=(resp=='SIM'?-1:1);
+    pausarCrono();
+    return;
+  }
+  if (empty)  padrao='';
+  if (piscava)  pausarCrono();
+  else  prosseguirCrono();
+};
+function deHoraParaSerial(hora) {
+  return (3600*$Natural(hora.tokin(1,$Def.numeral))+60*$Natural(hora.tokin(2,$Def.numeral))+$Natural(hora.tokin(3,$Def.numeral)));
+}
+function deSerialParaHora(hora) {
+  var h=Math.floor(hora/3600),m=Math.floor((hora-h*3600)/60),s=(hora-h*3600-m*60);
+  return $padL(h,2,'0')+':'+$padL(m,2,'0')+':'+$padL(s,2,'0');
+}
+function trocarCor(obj) {
+  obj=$get(obj);  if (!obj)  return;
+  var num=$String(obj.id).tokin(1,$Def.numeral);  if (num=='') return alert('-> O número da cor é inválido! Conferir o "id".');
+  num=$Natural(num);  // transforma em número
+  // Se a cor de troca for igual à da cor padrão do fundo, não será visível:
+  if ($Win.coresFundo[num]==$Win.coresFundo[0]) {
+    return alert('-> Você não pode ativar um Limite'+LF()+'   de cor igual à cor de fundo padrão.');
+  }
+  var atual=($Win.limite[num]<1?'< Digite no formato "HH:MM:SS" >':deSerialParaHora($Win.limite[num]));
+    var resp=prompt('              ** Configuração da Cor '+$Win.coresFundo[num].toUpperCase()+' **'+LF()+
+($Win.limite[num]<1?'(No momento, o Limite para troca de cor está indefinido)':
+                    '(Limite atual = "'+atual+'", no formato "HH:MM:SS")'+LF2()+
+                    '<<< IMPORTANTE: digite "0" (ZERO) para desativar o limite >>>'+LF2()+
+                    '-> Trocar a Cor de Fundo, se o relógio for '+($Win.sentido<0?'MENOR':'MAIOR, ou IGUAL,')+' que:'+LF2()),atual);
+  if (resp) {
+    var tempo=deHoraParaSerial(resp),nenhum=true;
+    $Win.limite[num]=(tempo<1?0:tempo);
+    obj.title=(tempo<1?'< Limite indefinido >':'Limite atual:'+LF()+'  '+deSerialParaHora(tempo));
+    // Tempo limpado este limite ...
+    if (tempo<1) {
+      // ... verifica se existe algum limite definido:
+      for (var i=0,qtd=$Win.limite.length;i<qtd;i++) {
+        if ($Win.limite[i]>0) {
+          nenhum=false;
+          break;
+        }
+      }
+      // Se nenhum limite estiver definido, deixa a cor de fundo padrão:
+      if (nenhum) {
+        $backcolor($Body,$Win.coresFundo[0]);  // muda para a cor padrão
+        $style($Body).color=$Win.coresFrente[0];
+        setTimeout('generateNoise(0.3)',50);  // com textura
+      }
+    }
+    return;
+  }
+  alert('-> Nada foi alterado!');
+};
+function corDeFundoPadrao() {
+  var resp=prompt('-> Informe a cor de fundo padrão (Atual = "'+$Win.coresFundo[0]+'"):'+LF2()+'(Válidas: '+$Win.valid.trim(';').replace(eval('/[;]+/gi'),', ')+')',$Win.coresFundo[0]);
+  if (resp) {
+    resp=resp.trim().toLowerCase();  if (resp=='')  return;
+    if ($Win.valid.indexOf(';'+resp+';')<0)  return alert('-> A cor "'+resp+'" é inválida, ou não'+LF()+'  está entre as cores disponíveis.');
+    // Verifica se uma cor de mesmo nome já tem um Limite de tempo configurado:
+    for (var i=1,qtd=$Win.coresFundo[i].length;i<qtd;i++) {
+      if (resp==$Win.coresFundo[i]) {
+        if ($Win.limite[i]>0) {
+          return alert('-> Você não pode trocar a cor de fundo padrão'+LF()+' por uma que esteja com o Limite ativado.');
+          break;
+        }
+      }
+    }
+    //
+    $Win.coresFundo[0]=resp;  // armazena o nome da nova cor
+    $backcolor($Body,resp);  // muda para a nova cor
+    // Para corrigir a cor da fonte exibida e conseguir manter o contraste necessário:
+    for (var i=1,cor;(cor=$Win.valid.tokout(i,';'))!='';i++) {
+      if (resp==cor) {
+        $style($Body).color=$Win.coresFrente[i-1];
+        break;
+      }
+    }
+    setTimeout('generateNoise(0.3)',50);  // com textura
+  }
+};
+var pontoParada=0;
+function pontoDeParada() {
+  var hora=deSerialParaHora($Win.pontoParada),parada=$get('menu8');
+  var resp=prompt('-> Mudar o Ponto de Parada (Atual = "'+hora+'") do relógio para: ',hora);
+  if (resp) {
+    $Win.pontoParada=deHoraParaSerial(resp);
+    parada.title='Atual:\n'+deSerialParaHora($Win.pontoParada);
+  } else
+    alert('-> Nada foi alterado');
+};
+function escreverHora() {
+  if ($Win.mode==0) {  // Está no Modo "Relógio" ...
+    $setHtml('relogio','&nbsp;');  // em "branco": para não exibir 2 relógios.
+  } else {  // ... está no Modo "Cronômetro".
+    var dt=new Date();
+    $setHtml('relogio',$padL(dt.getHours(),2,'0')+':'+$padL(dt.getMinutes(),2,'0')+':'+$padL(dt.getSeconds(),2,'0'));
+  }
+  setTimeout('escreverHora()',1000);  // atualiza a cada 1 segundo
+};
+var avisoTrocaFonte=false;
+function trocarFonte(obj) {
+  obj=$style(obj);  if (!obj)  return;
+  // Muda o tipo da fonte:
+  var tipo=$String(obj.fontFamily);  if (tipo=='')  tipo=null;
+  $style('borda').fontFamily=tipo;
+  // Muda o tamanho da fonte, para manter uma proporção igual de tamanho entre elas:
+  var size=$String(obj.fontSize).tokin(1,$Def.numeral+'.');  if (size=='')  size='1';  // significa que o tamnho é o Padrão
+  size=Number(size);  // converte para número
+  var tam=Number($String($style('borda').fontSize).tokin(1,$Def.numeral+'.'));  if (tam<2)  tam=2;  // mínimo
+  var novo=Math.floor(size*(tam/$Win.ajusteDaFonte)*10)/10;  if (novo<2)  novo=2;  // novo tamanho da fonte e confere menor tamanho
+// alert('Size = '+size+" (será o próximo ajuste)\nTam ="+tam+" (Ajuste anterior: "+$Win.ajusteDaFonte+")\nNovo = "+novo);
+  $Win.ajusteDaFonte=size;  // nova proporção de ajuste
+  $style('borda').fontSize=novo+'em';
+  if (!$Win.avisoTrocaFonte) {
+    $Win.avisoTrocaFonte=true;
+    alert('-> Caso não ocorra a troca da fonte, é possível que'+LF()+
+          '  ela NÃO esteja instalada no seu sistema.'+LF2()+
+          '-> Caso precise da fonte, clique com o botão da direita'+LF()+
+          '  do mouse sobre o nome da qual precisa para fazer o'+LF()+
+          '  download da mesma. Lembre de copiá-la para a pasta'+LF()+
+          '  na qual as fontes ficam armazenadas no seu sistema.');
+  }
+}
+function aviso() {
+  alert('-> Passe o mouse no topo da página para exibir o'+LF()+
+        '    Menu e configurar o Cronômetro e/ou Relógio.'+LF2()+
+        '-> Qualquer dúvida, favor entrar em contato.');
+};
+function downLoad(evt,fonte) {
+  $cancelEvt(evt);  // para impedir a propagação do "clique"
+  fonte=$String(fonte).trim();
+  $submit('fontes/'+(fonte==''?'LEIA-ME.txt':fonte+'.ttf'),'','_blank');  // ótimo (método que NÃO usa PopUp)
+};
+// Para funcionar somente após a página terminar de carregar:
+var onloadCnt=0,loaded=false,onLoadHandler=window.onload;  // endereço usado para desvio de interrupção !!
+window.onload=function() {  // adiciona a minha função ...
+  if (!window.loaded && window.onLoadHandler) {
+    window.loaded=true;  if ($isFunction(window.onLoadHandler))   window.onLoadHandler();  // ... e executa a função original.
+  }
+  if (!window.$Body || !window.$Win)  return setTimeout( 'window.onload()', 100 );  // aguarda a biblioteca se inicializar
+  if (!$Win.onloadCnt) {
+    $Win.onloadCnt++;
+    $addEvent($Doc,'mousemove',$Win.$menuShow);
+    $menuAdjust();
+    setTimeout('generateNoise(0.3)',50);  // com textura
+    acionarCronoHorario(0);  // controla o uso do cronômetro ...
+    escreverHora();  // controla a exibição do relógio ...
+    $Win.coresFundo=$Win.coresFundo.split(',');  // transforma em Array
+    $Win.coresFrente=$Win.coresFrente.split(',');  // transforma em Array
+    for (var i=0,qtd=$Win.coresFundo.length;i<qtd;i++)  $Win.limite[i]=0;
+    $menuShow();
+    setTimeout('aviso()',500);
+  }
+};
+</script>  
+</html>

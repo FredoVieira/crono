@@ -1,0 +1,20 @@
+-> Se alguma das fontes TTF do sistema NÃO funcionar, pode  ser  porque  a
+  respectiva fonte NÃO está instalada no seu micro.
+  
+   Para solucionar tal problema, basta copiar as fontes *.TTF para a pasta
+  pasta do seu sistema operacional, na qual elas ficam armazenadas.
+
+-> Para fazer o download da fonte que estiver em  falta  no  seu  sistema,
+  clique com o botão direito do mouse sobre o nome da fonte que precisar.
+
+-> No Windows, esta pasta das fontes costuma ser:
+       C:\WINDOWS\Fonts\
+       
+   Copie os arquivos *.ttf para essa pasta. Mas para funcionar, ainda será
+  preciso fechar e reabrir o seu navegador.
+  
+-> Espero que o programa lhe seja muito útil.
+   Abr.
+  
+   Ass: Rogerio Fredo Vieira
+   e-mail: fredovieira@yahoo.com.br
